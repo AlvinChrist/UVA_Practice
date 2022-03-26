@@ -3,6 +3,8 @@
     "iostream": "cpp",
     "iomanip": "cpp",
     "ctime": "cpp",
-    "limits": "cpp"
+    "limits": "cpp",
+    "string": "cpp",
+    "*.tcc": "cpp"
   }
 }
