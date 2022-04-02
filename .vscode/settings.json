@@ -5,6 +5,9 @@
     "ctime": "cpp",
     "limits": "cpp",
     "string": "cpp",
-    "*.tcc": "cpp"
+    "*.tcc": "cpp",
+    "vector": "cpp",
+    "stack": "cpp",
+    "xutility": "cpp"
   }
 }

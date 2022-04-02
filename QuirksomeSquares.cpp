@@ -12,6 +12,7 @@ unordered_map<int,vector<int>>::iterator it;
 bool splitNcheck(int num, int div) {
   int first = num / div;
   int second = num % div;
+  // cout << first << ' ' <<  second << '\n';
   return pow(first+second,2) == num;
 }
 
@@ -31,10 +32,9 @@ int main(){
     }
     else{
       int limit = pow(10,n);
-      int div = limit / 10;
+      int div = limit / pow(10,n/2);
       for(int i = 0; i < v.size(); i++){
-        if(v[i] >= limit) break;
-        if(splitNcheck(v[i],div)){
+        if(v[i] % limit == v[i] && splitNcheck(v[i],div)){
           cout << setw(n) << setfill('0');
           cout << v[i] << '\n';
           tmp.push_back(v[i]);
