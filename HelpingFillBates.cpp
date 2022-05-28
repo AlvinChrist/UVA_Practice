@@ -1,85 +1,53 @@
 #include <iostream>
-#include <map>
+#include <unordered_map>
+#include <vector>
 using namespace std;
-map<char,int> memory;
-map<char,int> temp;
-map<char,int>::iterator it;
-map<char,int>::iterator _it;
+
+unordered_map<char,int> m;
+unordered_map<char,int>::iterator it;
+vector<pair<char,pair<int,int>>> order;
+
+vector<string> splitString(string ss){
+  int start = 0;
+  vector<string> v;
+  for(int i = 1; i < ss.length(); i++){
+    if(ss[i] != ss[i-1]){
+      string t = ss.substr(start,i-start);
+      start = i;
+      v.push_back(t);
+    }
+  }
+  v.push_back(ss.substr(start,ss.length()));
+  return v;
+}
 
 int main(){
   ios_base::sync_with_stdio(false);
-  string seq; cin >> seq;
-  int totalDistinctChar = 0;
-  for(int i = 0; i < seq.size(); i++){
-    it = memory.find(seq[i]);
-    if(it != memory.end()){
+  string s; cin >> s;
+  for(int i = 0; i < s.length(); i++){
+    it = m.find(s[i]);
+    if(it != m.end()){
       it->second++;
     }
     else{
-      memory.insert(pair<char,int>(seq[i],1));
-      totalDistinctChar++;
+      m.insert(pair<char,int>(s[i],1));
+      order.push_back(pair<char,pair<int,int>>(s[i],pair<int,int>()));
     }
   }
-  int n; cin >> n;
-  while(n--){
-    string q; cin >> q;
-    int _totalDistinctChar = 0;
-    bool increasing = true;
-    bool existNlowerTotal = true;
-    int prevPos = 0;
-    char prevChar = ' ';
-    int start = seq.find(q[0]);
-    int end = 0;
-    for(int i = 0; i < q.size(); i++){
-      it = temp.find(q[i]);
-      if(it != temp.end()){
-        it->second++;
-      }
-      else{
-        temp.insert(pair<char,int>(q[i],1));
-        _totalDistinctChar++;
-      }
-      int pos = seq.find(q[i]);
-      while(pos < prevPos) {
-        int next = seq.find(q[i],pos+1);
-        pos = next;
-        if(pos == -1) break;
-        if(q[i] == prevChar && pos > prevPos) break;
-        if(q[i] != prevChar && pos >= prevPos) break;
-      }
-      // cout << q[i] << ' ' << pos << ' ' << prevPos << '\n';
-      if(pos < prevPos || pos == -1){
-        increasing = false;
+  int q; cin >> q;
+  while(q--){
+    string ss; cin >> ss;
+    vector<string> res = splitString(ss);
+    // check character occurences
+    bool check = true;
+    for(int i = 0; i < res.size(); i++){
+      it = m.find(res[i][0]);
+      if(it == m.end()){
+        bool check = false;
         break;
       }
-      prevPos = pos;
-      prevChar = q[i];
+      else if(it != m.end() && it->second != res[i])
     }
-    if(_totalDistinctChar > totalDistinctChar || !increasing){
-      cout << "Not matched\n";
-    }
-    else{
-      // for(_it = temp.begin(); _it != temp.end(); _it++){
-      //   cout << _it->first << ' ' << _it->second << '\n';
-      // }
-      for(_it = temp.begin(); _it != temp.end(); _it++){
-        it = memory.find(_it->first);
-        
-        if(it == memory.end() || it->second < _it->second){ // check if character exist and not more than sequence character
-          existNlowerTotal = false;
-          break;
-        }
-      }
-      if(!existNlowerTotal) cout << "Not matched\n";
-      else{
-        it = temp.find(q[q.size()-1]);
-        cout << "Matched " << start << ' ' << prevPos << '\n';
-      }
-    }
-    // cout << "incr: " << increasing << '\n';
-    // cout << "existNlowerTotal: " << existNlowerTotal << '\n';
-    // cout << totalDistinctChar << ' ' << _totalDistinctChar << '\n';
-    temp.clear();
   }
   return 0;
 }
